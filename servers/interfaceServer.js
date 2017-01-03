@@ -6,7 +6,7 @@ app.use(bodyParser());
 
 app.get('/activeroutes', function (req, res) {
   fs = require('fs');
-  fs.readFile('data/activeRoutes.txt', 'utf8' , function (err, routes) {
+  fs.readFile('../data/activeRoutes.txt', 'utf8' , function (err, routes) {
     if (err) {
       return console.log(err);
     }
@@ -19,7 +19,7 @@ app.get('/activeroutes', function (req, res) {
 })
 
 app.post('/resetServer', function (req, res) {
-  child_process.execSync("bash scripts/resetServer.sh");
+  child_process.execSync("bash ../scripts/resetServer.sh");
   res.send("Server Reset Successful"); 
 })
 
@@ -28,7 +28,8 @@ app.post('/createRoute', function (req, res) {
     res.status(400).send('No \"sedCommand\" in body');
   }
   console.log(req.body.sedCommand);
-  child_process.execSync("bash scripts/createRoute.sh \""+req.body.sedCommand+"\"");
+  child_process.execSync("echo $PWD");
+  child_process.execSync("./../scripts/createRoute.sh \""+req.body.sedCommand+"\"");
   console.log('test');
   res.send("Server Reset Successful"); 
 })

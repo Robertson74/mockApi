@@ -33,8 +33,8 @@ mainMenu()
   do
     echo "What would you like to do"
     echo "1: Create a route"
-    echo "2: See all routes (not implemented)"
-    echo "3: Reset the mock server (not implemented)"
+    echo "2: See all active routes"
+    echo "3: Reset the mock server"
     echo "4: Exit"
     read mainMenuChoice
     if [[ $mainMenuChoice -eq 1 ]] || [[ $mainMenuChoice -eq 2 ]] || [[ $mainMenuChoice -eq 3 ]] || [[ $mainMenuChoice -eq 4 ]]
@@ -204,7 +204,7 @@ composeSedCommand()
     # sed -i "6i app.$method(\'$path\', function (req, res) { res.send($response); })\n" mockApiServer.js
 }
 
-############################## Welcome Message
+############################## Try again message
 printTryAgainMessage()
 {
     clear
@@ -225,7 +225,7 @@ printWelcomeMessage()
     clear
 }
 
-############################## Welcome Message
+############################## Goodbye message
 printGoodbyeMessage()
 {
     echo ""
@@ -257,6 +257,26 @@ allDone()
 {
   echo "ROUTE SUCCESSFULLY CREATED!"
   read -n 1 -s -p "Press any key to continue..."
+  clearRouteVariables
+  happyWithRoute=0
+}
+
+############################## get active routes
+showActiveRoutes()
+{
+    clear
+    curl -H "Content-Type: application/json" -X GET $interfaceServer"/activeRoutes"
+    read -n 1 -s -p "Press any key to continue..."
+}
+
+############################## reset the active routes
+resetServer()
+{
+    clear
+    curl -H "Content-Type: application/json" -X POST $interfaceServer"/resetServer"
+    echo ""
+    echo ""
+    read -n 1 -s -p "Press any key to continue..."
 }
 
 ################ Main Program
@@ -302,14 +322,10 @@ do
     allDone
   elif [[ mainMenuChoice -eq 2 ]]
   then
-    echo "Not Implemented"
-    read -n 1 -s -p "Press any key to continue..."
-    clear
+    showActiveRoutes
   elif [[ mainMenuChoice -eq 3 ]]
   then
-    echo "Not Implemented"
-    read -n 1 -s -p "Press any key to continue..."
-    clear
+    resetServer
   elif [[ mainMenuChoice -eq 4 ]]
   then
     clear
